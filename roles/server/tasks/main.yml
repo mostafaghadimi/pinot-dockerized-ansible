@@ -1,0 +1,17 @@
+- name: Generate Server config file
+  template:
+    src: ../templates/server-conf.j2
+    dest: "{{ pinot_installation_path }}/server.conf"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Generate Server compose file
+  template:
+    src: ../templates/server-compose.j2
+    dest: "{{  pinot_installation_path }}/server-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  register: server_compose_file
+  notify: Start server compose file
