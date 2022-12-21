@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  pinot-server:
+    image: {{ pinot_image_name }}:{{ pinot_image_version }}
+    command: "StartServer -clusterName bigdata-pinot -zkAddress {% for item in groups['zookeepers'] %}
+{{hostvars[item | quote]['ansible_host']}}:2181{{- "," if not loop.last else "" -}}
+{%- endfor %} -configFileName /server.conf"
+    restart: unless-stopped
+    hostname: {{ hostvars[inventory_hostname]['inventory_hostname'] }} 
+    container_name: {{ hostvars[inventory_hostname]['inventory_hostname'] }} 
+    ports:
+      - "8096-8099:8096-8099"
+      - "9000:9000"
+      - "8008:8008"
+    environment:
+      JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx60G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-server.log -javaagent:/opt/pinot/etc/jmx_prometheus_javaagent/jmx_prometheus_javaagent-0.12.0.jar=8008:/opt/pinot/etc/jmx_prometheus_javaagent/configs/pinot.yml"
+    volumes:
+      - {{ server_host_conf }}:/server.conf
+      - {{ server_host_data_dir }}/segment:/var/pinot/server/data/segment
+      - {{ server_host_data_dir }}/index:/var/pinot/server/data/index
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,0 +1,47 @@
+---
+- name: Install Docker and its Prerequisites
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600  # one hour 
+    name: "{{ pkgs }}"
+    state: present
+  vars:
+    pkgs:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+
+- name: Create directory for keyring
+  become: true
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+- name: Add Docker APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/{{ ansible_system | lower }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+
+- name: Install Docker
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600  # one hour 
+    name: "{{ pkgs }}"
+    state: present
+  vars:
+    pkgs:
+    - docker-ce 
+    - docker-ce-cli 
+    - containerd.io 
+    - docker-compose-plugin
+
+- name: Create directory for Pinot installation
+  file:
+    path: "{{ pinot_installation_path }}"
+    state: directory
+    recurse: true
+    mode: 0755

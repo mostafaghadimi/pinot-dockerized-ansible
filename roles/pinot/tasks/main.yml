@@ -1,0 +1,70 @@
+---
+- name: configuration
+  hosts: all
+  import_tasks: configuration.yml
+
+# Zookeeper
+- name: Generate Zookeeper compose file
+  template: 
+    src: ../templates/zookeeper-compose.j2
+    dest: "{{ pinot_installation_path }}/zookeeper-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  # when: "inventory_hostname in groups['zookeepers']"
+
+# Controller
+- name: Generate Controller config file
+  template:
+    src: ../templates/controller-conf.j2
+    dest: "{{ pinot_installation_path }}/controller.conf"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['controllers']"
+
+- name: Generate Controller compose file
+  template:
+    src: ../templates/controller-compose.j2
+    dest: "{{ pinot_installation_path }}/controller-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['controllers']"
+
+# Broker
+- name: Generate Broker config file
+  template:
+    src: ../templates/broker-conf.j2
+    dest: "{{ pinot_installation_path }}/broker.conf"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['brokers']"
+
+- name: Generate Broker compose file
+  template:
+    src: ../templates/broker-compose.j2
+    dest: "{{ pinot_installation_path }}/broker-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['brokers']"
+
+- name: Generate Server config file
+  template:
+    src: ../templates/server-conf.j2
+    dest: "{{ pinot_installation_path }}/server.conf"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['servers']"
+
+- name: Generate Server compose file
+  template:
+    src: ../templates/server-compose.j2
+    dest: "{{  pinot_installation_path }}/server-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['servers']"

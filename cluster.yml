@@ -1,0 +1,4 @@
+- gather_facts: true
+  hosts: all
+  roles:
+    - { role: pinot }
