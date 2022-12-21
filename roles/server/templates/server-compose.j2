@@ -2,7 +2,7 @@ version: '3.7'
 services:
   pinot-server:
     image: {{ pinot_image_name }}:{{ pinot_image_version }}
-    command: "StartServer -clusterName bigdata-pinot -zkAddress {% for item in groups['zookeepers'] %}
+    command: "StartServer -clusterName {{ controller_helix_cluster_name }} -zkAddress {% for item in groups['zookeepers'] %}
 {{hostvars[item | quote]['ansible_host']}}:2181{{- "," if not loop.last else "" -}}
 {%- endfor %} -configFileName /server.conf"
     restart: unless-stopped
