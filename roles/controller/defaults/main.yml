@@ -1,0 +1,10 @@
+---
+controller_data_dir: /var/pinot/controller/data
+controller_port: 9000
+controller_vip_port: 9000
+controller_helix_cluster_name: bigdata-pinot-ansible
+zookeeper_address: zookeeper
+zookeeper_port: 2181
+controller_tenant_isolation_enable: true
+controller_host_conf: ./controller.conf
+controller_host_data: ./data/controller_data

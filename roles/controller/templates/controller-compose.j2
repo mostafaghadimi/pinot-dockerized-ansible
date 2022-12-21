@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  pinot-controller:
+    image: {{ pinot_image_name }}:{{ pinot_image_version }}
+    command: "StartController -configFileName /controller.conf"
+    container_name: {{ hostvars[inventory_hostname]['inventory_hostname'] }} 
+    hostname: {{ hostvars[inventory_hostname]['inventory_hostname'] }} 
+    restart: unless-stopped
+    ports:
+      - "8086-8089:8086-8089"
+      - "9000:9000"
+      - "8008:8008"
+    environment:
+      JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms1G -Xmx28G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log -javaagent:/opt/pinot/etc/jmx_prometheus_javaagent/jmx_prometheus_javaagent-0.12.0.jar=8008:/opt/pinot/etc/jmx_prometheus_javaagent/configs/pinot.yml"
+    volumes:
+      - {{ controller_host_conf }}:/controller.conf
+      - {{ controller_host_data }}:/var/pinot/controller/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
