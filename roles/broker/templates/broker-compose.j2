@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  pinot-broker:
+    image: {{ pinot_image_name }}:{{ pinot_image_version }}
+    container_name: {{ hostvars[inventory_hostname]['inventory_hostname'] }}
+    hostname: {{ hostvars[inventory_hostname]['inventory_hostname'] }} 
+    command: "StartBroker -clusterName {{ controller_helix_cluster_name }} -zkAddress {% for item in groups['zookeepers'] %}
+{{hostvars[item | quote]['ansible_host']}}:2181{{- "," if not loop.last else "" -}}
+{%- endfor %} -configFileName /broker.conf"
+    restart: unless-stopped
+    ports:
+      - "8096-8099:8096-8099"
+      - "9000:9000"
+      - "8008:8008"
+    environment:
+      JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx40G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-broker.log -javaagent:/opt/pinot/etc/jmx_prometheus_javaagent/jmx_prometheus_javaagent-0.12.0.jar=8008:/opt/pinot/etc/jmx_prometheus_javaagent/configs/pinot.yml"
+    volumes:
+      - {{ broker_host_conf }}:/broker.conf
+
+

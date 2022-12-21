@@ -1,0 +1,4 @@
+---
+- name: Start broker compose file
+  shell:
+    cmd: "docker compose -f {{ broker_compose_file.dest }} up -d"
