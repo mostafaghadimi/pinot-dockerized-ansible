@@ -1,0 +1,28 @@
+{% set current_host =  hostvars[inventory_hostname]['ansible_env'].SSH_CONNECTION.split(' ')[2] %}
+{% set zk_hosts = groups['zookeepers'] %}
+version: '3.7'
+services:
+  zookeeper:
+    image: {{ zookeeper_image_name }}:{{ zookeeper_image_version }}
+    hostname: {{ hostvars[inventory_hostname]['inventory_hostname'] }}
+    container_name: {{ hostvars[inventory_hostname]['inventory_hostname'] }}
+    ports:
+      - "8080:8080"
+      - "2181:2181"
+      - "3888:3888"
+      - "2888:2888"
+    environment:
+      ZOO_MY_ID: {{ current_host.split('.')[-1] }}
+      ZOO_SERVERS: {% for item in zk_hosts %}
+server.{{loop.index}}={{hostvars[item | quote]['ansible_host'] if hostvars[item | quote]['ansible_host'] != current_host else '0.0.0.0'}}:2888:3888;2181{{- " " if not loop.last else "" -}} 
+{%- endfor %}      
+      ZOO_LOG4J_PROP: 
+      ZOO_4LW_COMMANDS_WHITELIST:  "*"
+    volumes:
+      - {{ zookeeper_host_data_dir }}:/data
+      - {{ zookeeper_host_data_log_dir }}:/datalog
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

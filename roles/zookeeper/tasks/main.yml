@@ -1,0 +1,10 @@
+---
+- name: Generate Zookeeper compose file
+  template: 
+    src: ../templates/zookeeper-compose.j2
+    dest: "{{ pinot_installation_path }}/zookeeper-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  register: zookeeper
+  notify: Start zookeeper-compose file

@@ -1,0 +1,4 @@
+---
+- name: Start zookeeper-compose file
+  shell:
+    cmd: "docker compose -f {{ zookeeper.dest }} up -d"
