@@ -3,7 +3,22 @@
   roles: 
     - { role: prerequisites }
 
-# - gather_facts: true
-#   hosts: all
-#   roles:
-#     - { role: zookeeper }
+- hosts: zookeepers
+  gather_facts: true
+  roles:
+    - { role: zookeeper }
+
+- hosts: controllers
+  gather_facts: true
+  roles:
+    - { role: controller }
+
+- hosts: brokers
+  gather_facts: true
+  roles:
+    - { role: broker }
+
+- hosts: servers
+  gather_facts: true
+  roles:
+    - { role: server }
