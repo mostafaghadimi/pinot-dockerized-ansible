@@ -1,4 +1,9 @@
-- gather_facts: true
-  hosts: all
-  roles:
-    - { role: pinot }
+- hosts: all
+  gather_facts: true
+  roles: 
+    - { role: prerequisites }
+
+# - gather_facts: true
+#   hosts: all
+#   roles:
+#     - { role: zookeeper }
