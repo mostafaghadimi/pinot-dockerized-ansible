@@ -1,0 +1,10 @@
+---
+monitoring_installation_path: /bigdata/monitoring-ansible
+
+prometheus_image_name: prom/prometheus
+prometheus_image_tag: v2.41.0
+prometheus_host_data: ./data/prometheus
+prometheus_config: prometheus.yml
+
+grafana_image_name: grafana/grafana
+grafana_image_tag: 9.3.2

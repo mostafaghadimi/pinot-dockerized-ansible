@@ -1,0 +1,4 @@
+---
+- name: Start monitoring compose file
+  shell:
+    cmd: "docker compose -f {{ monitoring_compose_file.dest }} up -d"

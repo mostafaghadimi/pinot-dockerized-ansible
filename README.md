@@ -1,5 +1,5 @@
 - [X] Setup new cluster
   - [ ] Customizable cluster configuration
   - [ ] Harden the cluster using ACL configuration
-- [ ] Setup monitoring with Grafana and Prometheus
+- [X] Setup monitoring with Grafana and Prometheus
 - [ ] Create new tables, schemas

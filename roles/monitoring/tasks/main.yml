@@ -1,0 +1,24 @@
+---
+- name: Create directory for monitoring
+  file:
+    path: "{{ monitoring_installation_path }}"
+    state: directory
+    mode: 0755
+
+- name: Generate Prometheus config file
+  template:
+    src: ../templates/prometheus-config.j2
+    dest: "{{ monitoring_installation_path }}/{{prometheus_config}}"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Generate monitoring compose file
+  template:
+    src: ../templates/monitoring-compose.j2
+    dest: "{{ monitoring_installation_path }}/monitoring-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  register: monitoring_compose_file
+  notify: Start monitoring compose file

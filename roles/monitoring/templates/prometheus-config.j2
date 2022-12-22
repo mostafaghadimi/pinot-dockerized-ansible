@@ -1,0 +1,28 @@
+{% set current_host =  hostvars[inventory_hostname]['ansible_env'].SSH_CONNECTION.split(' ')[2] %}
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'mostafa-test-project'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 15s
+    static_configs:
+         - targets: ['localhost:9090']
+
+  - job_name: 'pinot'
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 15s
+    static_configs:
+         - targets: [{% for servers in ['servers', 'controllers', 'brokers'] %}
+{% set outer_loop = loop %}
+{%- for item in groups[servers] %}
+"{{ hostvars[item | quote]['ansible_host'] if hostvars[item | quote]['ansible_host'] != current_host else '0.0.0.0' }}:8008"{{- ", " if not outer_loop.last or not loop.last else "" -}} 
+{%- endfor %}
+{%- endfor %}]

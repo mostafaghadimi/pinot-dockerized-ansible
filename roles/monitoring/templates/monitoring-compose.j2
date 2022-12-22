@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  prometheus:
+    image: {{ prometheus_image_name }}:{{ prometheus_image_tag }}
+    ports:
+      - 9000:9000
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - {{ prometheus_host_data}}:/prometheus
+
+  grafana:
+    image: {{ grafana_image_name }}:{{ grafana_image_tag }}
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
