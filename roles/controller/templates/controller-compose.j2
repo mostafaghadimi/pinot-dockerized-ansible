@@ -15,6 +15,16 @@ services:
     volumes:
       - {{ controller_host_conf }}:/controller.conf
       - {{ controller_host_data }}:/var/pinot/controller/data
+    extra_hosts:
+{% for item in groups['servers'] %}
+      - "{{ hostvars[item | quote]['inventory_hostname'] }}:{{hostvars[item | quote]['ansible_host']}}"
+{% endfor %}
+{% for item in groups['controllers'] %}
+      - "{{ hostvars[item | quote]['inventory_hostname'] }}:{{hostvars[item | quote]['ansible_host']}}"
+{% endfor %}
+{% for item in groups['brokers'] %}
+      - "{{ hostvars[item | quote]['inventory_hostname'] }}:{{hostvars[item | quote]['ansible_host']}}"
+{% endfor %}
     logging:
       driver: "json-file"
       options:
