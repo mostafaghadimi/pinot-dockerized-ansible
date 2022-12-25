@@ -3,3 +3,15 @@ pinot.server.adminapi.port=8097
 pinot.server.instance.dataDir=/var/pinot/server/data/index
 pinot.server.instance.segmentTarDir=/var/pinot/server/data/segment
 pinot.set.instance.id.to.hostname=true
+
+# this is the default, 10 minutes.
+#pinot.server.startup.timeoutMs=600000
+# this is the default. you do not have to specify this.
+#pinot.server.startup.enableServiceStatusCheck=true
+# the default is 0, and the server will not wait
+# NOTE: realtimeConsumptionCatchupWaitMs < timeoutMs
+#pinot.server.starter.realtimeConsumptionCatchupWaitMs=60000
+
+#pinot.server.instance.segment.store.uri=<URI of segment store>
+#pinot.server.instance.enable.split.commit=true
+#pinot.server.storage.factory.class.hdfs=<the corresponding Pinot FS impl>

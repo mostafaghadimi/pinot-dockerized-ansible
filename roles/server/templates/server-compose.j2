@@ -18,8 +18,13 @@ services:
       - {{ server_host_conf }}:/server.conf
       - {{ server_host_data_dir }}/segment:/var/pinot/server/data/segment
       - {{ server_host_data_dir }}/index:/var/pinot/server/data/index
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    extra_hosts:
+{% for item in groups['servers'] %}
+      - "{{ hostvars[item | quote]['inventory_hostname'] }}:{{hostvars[item | quote]['ansible_host']}}"
+{% endfor %}
+{% for item in groups['controllers'] %}
+      - "{{ hostvars[item | quote]['inventory_hostname'] }}:{{hostvars[item | quote]['ansible_host']}}"
+{% endfor %}
+{% for item in groups['brokers'] %}
+      - "{{ hostvars[item | quote]['inventory_hostname'] }}:{{hostvars[item | quote]['ansible_host']}}"
+{% endfor %}
