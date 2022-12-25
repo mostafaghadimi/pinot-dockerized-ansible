@@ -13,6 +13,16 @@
     group: root
     mode: 0755
 
+- name: Generate node exporter compose file
+  template:
+    src: ../templates/node-exporter-compose.j2
+    dest: "{{ monitoring_installation_path }}/node-exporter-compose.yml"
+    owner: root
+    group: root
+    mode: 0755
+  register: node_exporter_compose_file
+  when: "inventory_hostname not in groups['monitorings']"
+
 - name: Generate monitoring compose file
   template:
     src: ../templates/monitoring-compose.j2
@@ -22,3 +32,4 @@
     mode: 0755
   register: monitoring_compose_file
   notify: Start monitoring compose file
+  when: "inventory_hostname in groups['monitorings']"
