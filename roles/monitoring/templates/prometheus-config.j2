@@ -1,4 +1,6 @@
 {% set current_host =  hostvars[inventory_hostname]['ansible_env'].SSH_CONNECTION.split(' ')[2] %}
+{% set monitoring_ips = groups['monitorings'] | map('extract', hostvars, ['ansible_host']) | join(',') %}
+{% set targets_list = [] %}
 global:
   scrape_interval:     15s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # By default, scrape targets every 15 seconds.
@@ -12,13 +14,13 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 15s
+    scrape_interval: 5s
     static_configs:
          - targets: ['localhost:9090']
 
   - job_name: 'pinot'
-    # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 15s
+    # Override the global default and scrape targets from this job every 10 seconds.
+    scrape_interval: 10s
     static_configs:
          - targets: [{% for servers in ['servers', 'controllers', 'brokers'] %}
 {% set outer_loop = loop %}
@@ -26,3 +28,17 @@ scrape_configs:
 "{{ hostvars[item | quote]['ansible_host'] if hostvars[item | quote]['ansible_host'] != current_host else '0.0.0.0' }}:8008"{{- ", " if not outer_loop.last or not loop.last else "" -}} 
 {%- endfor %}
 {%- endfor %}]
+  - job_name: "node_exporter"
+    static_configs:
+        - targets: {% for server in groups['all'] %}
+{% if hostvars[server|quote]['ansible_host'] | quote + ":9100" not in targets_list %}
+{% if hostvars[server|quote]['ansible_host'] not in monitoring_ips %}
+{% set _ = targets_list.append(hostvars[server|quote]['ansible_host'] | quote + ":9100") %}
+{% else %}
+{% if  "node-exporter:9100" not in targets_list %}
+{% set _ = targets_list.append("node-exporter:9100") %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}{{ targets_list }}
+

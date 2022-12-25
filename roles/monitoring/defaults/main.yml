@@ -8,3 +8,6 @@ prometheus_config: prometheus.yml
 
 grafana_image_name: grafana/grafana
 grafana_image_tag: 9.3.2
+
+node_exporter_image_name: prom/node-exporter
+node_exporter_tag: v1.5.0

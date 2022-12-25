@@ -2,16 +2,37 @@ version: '3.7'
 services:
   prometheus:
     image: {{ prometheus_image_name }}:{{ prometheus_image_tag }}
+    container_name: prometheus
     ports:
-      - 9000:9000
+      - 9009:9000
       - 9090:9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - {{ prometheus_host_data}}:/prometheus
+    restart: unless-stopped
+  
+  node-exporter:
+    image: {{ node_exporter_image_name }}:{{ node_exporter_tag }}
+    container_name: node-exporter
+    ports:
+      - 9100:9100
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
 
   grafana:
     image: {{ grafana_image_name }}:{{ grafana_image_tag }}
+    container_name: grafana
     ports:
       - 3000:3000
+    restart: unless-stopped
     depends_on:
       - prometheus
+      - node-exporter
