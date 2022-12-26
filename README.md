@@ -1,5 +1,8 @@
 - [X] Setup new cluster
+  - [ ] Add Docker image pull to prerequisites role
   - [ ] Customizable cluster configuration
   - [ ] Harden the cluster using ACL configuration
 - [X] Setup monitoring with Grafana and Prometheus
+  - [X] Persiste data of Grafana 
 - [ ] Create new tables, schemas
+  - [ ] CURL
