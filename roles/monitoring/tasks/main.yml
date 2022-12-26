@@ -5,14 +5,6 @@
     state: directory
     mode: 0755
 
-- name: Generate Prometheus config file
-  template:
-    src: ../templates/prometheus-config.j2
-    dest: "{{ monitoring_installation_path }}/{{prometheus_config}}"
-    owner: root
-    group: root
-    mode: 0755
-
 - name: Generate node exporter compose file
   template:
     src: ../templates/node-exporter-compose.j2
@@ -20,8 +12,18 @@
     owner: root
     group: root
     mode: 0755
+  notify: Start node exporter compose file
   register: node_exporter_compose_file
   when: "inventory_hostname not in groups['monitorings']"
+
+- name: Generate Prometheus config file
+  template:
+    src: ../templates/prometheus-config.j2
+    dest: "{{ monitoring_installation_path }}/{{prometheus_config}}"
+    owner: root
+    group: root
+    mode: 0755
+  when: "inventory_hostname in groups['monitorings']"
 
 - name: Generate monitoring compose file
   template:

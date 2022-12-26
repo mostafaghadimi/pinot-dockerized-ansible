@@ -3,6 +3,7 @@ services:
   prometheus:
     image: {{ prometheus_image_name }}:{{ prometheus_image_tag }}
     container_name: prometheus
+    user: "0"
     ports:
       - 9009:9000
       - 9090:9090
@@ -30,9 +31,12 @@ services:
   grafana:
     image: {{ grafana_image_name }}:{{ grafana_image_tag }}
     container_name: grafana
+    user: "0"
     ports:
       - 3000:3000
     restart: unless-stopped
+    volumes:
+      - {{ grafana_host_data }}:/var/lib/grafana
     depends_on:
       - prometheus
       - node-exporter

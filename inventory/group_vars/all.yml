@@ -1,5 +1,6 @@
 ---
 pinot_installation_path: /bigdata/pinot-ansible-test
+monitoring_installation_path: /bigdata/monitoring-ansible
 pinot_image_name: apachepinot/pinot
 pinot_image_version: 0.11.0
 controller_helix_cluster_name: bigdata-pinot-ansible
