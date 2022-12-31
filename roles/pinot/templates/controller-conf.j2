@@ -1,9 +1,0 @@
-controller.helix.cluster.name={{ controller_helix_cluster_name }}
-controller.port={{ controller_port }}
-controller.vip.port={{ controller_port }}
-controller.host={{ hostvars[inventory_hostname]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}
-controller.vip.host={{ hostvars[inventory_hostname]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}
-controller.data.dir={{ controller_data_dir }}
-controller.zk.str={{ zookeeper_address }}:{{ zookeeper_port }}
-pinot.set.instance.id.to.hostname=true
-controller.tenant.isolation.enable={{ controller_tenant_isolation_enable }}
