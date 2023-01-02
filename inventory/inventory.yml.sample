@@ -1,0 +1,78 @@
+all:
+  hosts:
+    server1:
+      ansible_user: root
+      ansible_host: 172.16.24.11
+      ip: 172.16.24.11
+      access_ip: 172.16.24.11
+    server2:
+      ansible_user: root
+      ansible_host: 172.16.24.12
+      ip: 172.16.24.12
+      access_ip: 172.16.24.12
+    server3:
+      ansible_user: root
+      ansible_host: 172.16.24.13
+      ip: 172.16.24.13
+      access_ip: 172.16.24.13
+
+    controller1:
+      ansible_user: root
+      ansible_host: 172.16.24.14
+      ip: 172.16.24.14
+      access_ip: 172.16.24.14
+    controller2:
+      ansible_user: root
+      ansible_host: 172.16.24.15
+      ip: 172.16.24.15
+      access_ip: 172.16.24.15
+
+    broker1:
+      ansible_user: root
+      ansible_host: 172.16.24.16
+      ip: 172.16.24.16
+      access_ip: 172.16.24.16
+    broker2:
+      ansible_user: root
+      ansible_host: 172.16.24.17
+      ip: 172.16.24.17
+      access_ip: 172.16.24.17
+
+    zookeeper1:
+      ansible_user: root
+      ansible_host: 172.16.24.14
+      ip: 172.16.24.14
+      access_ip: 172.16.24.14
+    zookeeper2:
+      ansible_user: root
+      ansible_host: 172.16.24.15
+      ip: 172.16.24.15
+      access_ip: 172.16.24.15
+
+    monitoring-server:
+      ansible_user: root
+      ansible_host: 172.16.24.11
+      ip: 172.16.24.11
+      access_ip: 172.16.24.11
+      
+  children:
+    brokers:
+      hosts:
+        broker1:
+        broker2:
+    controllers:
+      hosts:
+        controller1:
+        controller2:
+    servers:
+      hosts:
+        server1:
+        server2:
+        server3:
+    zookeepers:
+      hosts:
+        zookeeper1:
+        zookeeper2:
+    monitorings:
+      hosts:
+        monitoring-server:
