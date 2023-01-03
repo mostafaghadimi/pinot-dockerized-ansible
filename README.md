@@ -27,8 +27,7 @@ In order to install Apache Pinot cluster on your nodes, it is required to do the
 
 - [X] Setup new cluster
   - [ ] Add Docker image pull to prerequisites role
-  - [ ] Customizable cluster configuration
-  - [ ] Harden the cluster using ACL configuration
+  - [ ] Add password vault 
+  - [ ] Generalize group_vars file with all possible settings
 - [X] Setup monitoring with Grafana and Prometheus
   - [X] Persist data of Grafana 
-
