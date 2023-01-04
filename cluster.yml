@@ -23,7 +23,7 @@
   roles:
     - { role: server }
 
-- hosts: monitorings
+- hosts: all
   gather_facts: true
   roles:
     - { role: monitoring }
