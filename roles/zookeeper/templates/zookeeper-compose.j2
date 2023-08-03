@@ -16,8 +16,10 @@ services:
       ZOO_SERVERS: {% for item in zk_hosts %}
 server.{{ hostvars[item | quote]['ansible_host'].split('.')[-1] }}={{hostvars[item | quote]['ansible_host'] if hostvars[item | quote]['ansible_host'] != current_host else '0.0.0.0'}}:2888:3888;2181{{- " " if not loop.last else "" -}} 
 {%- endfor %}      
-      ZOO_LOG4J_PROP: 
+      ZOO_LOG4J_PROP: {{ zookeeper_log4j_prop }}
       ZOO_4LW_COMMANDS_WHITELIST:  "*"
+      ZOO_AUTOPURGE_PURGEINTERVAL: {{ zookeeper_autopurge_purgeinterval }}
+      ZOO_AUTOPURGE_SNAPRETAINCOUNT: {{ zookeeper_autopurge_snapretaincount }}
     volumes:
       - {{ zookeeper_host_data_dir }}:/data
       - {{ zookeeper_host_data_log_dir }}:/datalog

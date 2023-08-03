@@ -3,3 +3,6 @@ zookeeper_image_name: zookeeper
 zookeeper_image_version: 3.8.0-temurin
 zookeeper_host_data_dir: ./data/zookeeper_data
 zookeeper_host_data_log_dir: ./data/zookeeper_data_log
+zookeeper_log4j_prop: "WARN,ROLLINGFILE"
+zookeeper_autopurge_purgeinterval: 1   # This value is based on day number
+zookeeper_autopurge_snapretaincount: 10 
